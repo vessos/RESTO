@@ -21,7 +21,7 @@ public class CountryControllerImpl implements CountryController {
     }
 
     @Override
-    public Flux<CountryDto> getCountries() {
+    public Flux<CountryDto> getAllCountries() {
         return countryService.getAllCountry();
     }
 

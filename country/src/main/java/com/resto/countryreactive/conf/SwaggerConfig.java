@@ -13,7 +13,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Reactive Documentation")
+                .title("Country Reactive Documentation")
                 .description("Reactive API Documentation")
                 .version("1.0.0")
                 .build();

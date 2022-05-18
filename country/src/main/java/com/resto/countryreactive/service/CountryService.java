@@ -17,7 +17,10 @@ public interface CountryService {
 
     public Mono<CountryDto> saveCountry(Mono<CountryDto> countryDto);
 
+    public Flux<CountryDto> saveAllCountry(Flux<CountryDto> countries);
+
     public Mono<CountryDto> updateCountry(Mono<CountryDto> countryDtoMono,String id);
 
     public Mono<Void> deleteCountry(String id);
+
 }

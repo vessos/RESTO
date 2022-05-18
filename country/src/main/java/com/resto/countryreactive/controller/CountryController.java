@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -27,7 +28,8 @@ public interface CountryController {
 
     )
     @GetMapping("/all")
-    Flux<CountryDto> getCountries();
+    @ResponseStatus(HttpStatus.OK)
+    Flux<CountryDto> getAllCountries();
 
     @Operation(
             summary = "Get country by country Id",
@@ -70,6 +72,7 @@ public interface CountryController {
             }
     )
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     Mono<CountryDto> saveProduct(@RequestBody Mono<CountryDto> countryDtoMono);
 
     @Operation(
@@ -88,5 +91,8 @@ public interface CountryController {
     Mono<CountryDto> updateProduct(@RequestBody Mono<CountryDto> countryDtoMono,@PathVariable String id);
 
     @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     Mono<Void> deleteProduct(@PathVariable String id);
+
+    //TO DO - when implemented validation in controllers should implemented test for them
 }
