@@ -1,35 +1,28 @@
 package com.resto.countryreactive.controller.impl.intg;
 
-import com.resto.countryreactive.controller.CountryController;
 import com.resto.countryreactive.dto.CountryDto;
 import com.resto.countryreactive.repository.CountryRepository;
 import com.resto.countryreactive.service.CountryService;
-import com.resto.countryreactive.service.CountryServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
-@ExtendWith(SpringExtension.class)
-@ActiveProfiles("test")
+@SpringBootTest
+@AutoConfigureDataMongo
+@ImportAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
 @AutoConfigureWebTestClient
 public class CountryControllerImplIntgTest {
 
@@ -58,8 +51,9 @@ public class CountryControllerImplIntgTest {
                 .countryName("Гърция")
                 .countryNameEu("Greece")
                 .countryCode("GR").build();
-        countryService.saveAllCountry(Flux.fromIterable(List.of(countryDto,countryDto1)))
-        .blockLast();
+        CountryDto savedDto = countryService.saveAllCountry(Flux.fromIterable(List.of(this.countryDto, countryDto1)))
+                .blockLast();
+        countryDto1.setId(savedDto.getId());
     }
 
     @AfterEach
@@ -82,7 +76,7 @@ public class CountryControllerImplIntgTest {
 
     @Test
     void getAllCountriesMissingResult() {
-
+        countryRepository.deleteAll().block();
         webTestClient
                 .get()
                 .uri(COUNTRY_URL + "/all")
@@ -96,7 +90,7 @@ public class CountryControllerImplIntgTest {
 
         webTestClient
                 .get()
-                .uri(COUNTRY_URL + "/1234")
+                .uri(COUNTRY_URL + "/" + countryDto1.getId())
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful()
@@ -122,7 +116,7 @@ public class CountryControllerImplIntgTest {
                 .get()
                 .uri( uriBuilder -> uriBuilder
                         .path(COUNTRY_URL + "/country-code")
-                        .queryParam("countryCode","DE")
+                        .queryParam("countryCode",countryDto.getCountryCode())
                         .build())
                 .exchange()
                 .expectStatus()
@@ -147,12 +141,12 @@ public class CountryControllerImplIntgTest {
 
     @Test
     void saveProduct() {
-        var country = CountryDto.builder().countryId(1).countryName("България").countryNameEu("Bulgaria").countryCode("SW").build();
-
+        var country = CountryDto.builder().countryId(6).countryName("Норвегия").countryNameEu("Norway").countryCode("NR").build();
+        CountryDto countryDtoMono = countryService.saveCountry(Mono.just(country)).block();
         webTestClient
                 .post()
                 .uri(COUNTRY_URL)
-                .bodyValue(country)
+                .bodyValue(countryDtoMono)
                 .exchange()
                 .expectStatus()
                 .isCreated()
@@ -161,19 +155,25 @@ public class CountryControllerImplIntgTest {
                     var responseBody = countryDtoEntityExchangeResult.getResponseBody();
                     assert responseBody !=null;
                     assert responseBody.getId() !=null;
-                    assertEquals("1234f65ht",responseBody.getId());
+                    assertEquals(countryDtoMono.getId(),responseBody.getId());
                 });
     }
 
     @Test
     void updateProduct() {
-        var country = CountryDto.builder().countryId(1).countryName("България").countryNameEu("Bulgaria").countryCode("SW").build();
-        final String id = "";
+        var country =  CountryDto.builder()
+                .countryId(2)
+                .countryName("Гърция1")
+                .countryNameEu("Greece1")
+                .countryCode("GR").build();
+        final String id = countryDto1.getId();
+        countryService.updateCountry(Mono.just(country),id).block();
+        Mono<CountryDto> countryById = countryService.getCountryById(id);
 
         webTestClient
                 .put()
                 .uri(COUNTRY_URL + "/update/{id}",id)
-                .bodyValue(country)
+                .bodyValue(countryById.block())
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful()
@@ -182,18 +182,20 @@ public class CountryControllerImplIntgTest {
                     var responseBody = countryDtoEntityExchangeResult.getResponseBody();
                     assert responseBody !=null;
                     assert responseBody.getId() !=null;
-                    assertEquals("България1",responseBody.getCountryName());
+                    assertEquals(country.getCountryName(),responseBody.getCountryName());
                 });
     }
 
     @Test
     void deleteProduct() {
-        var id = "123";
+        var id = countryDto1.getId();
+        countryService.deleteCountry(id).block();
+
         webTestClient
-                .delete()
-                .uri(COUNTRY_URL +"/delete/" + id)
+                .get()
+                .uri(COUNTRY_URL + "/" + id)
                 .exchange()
                 .expectStatus()
-                .isNoContent();
+                .is4xxClientError();
     }
 }
