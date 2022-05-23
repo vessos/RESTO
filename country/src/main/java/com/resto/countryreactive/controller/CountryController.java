@@ -16,14 +16,14 @@ import reactor.core.publisher.Mono;
 public interface CountryController {
 
     @Operation(
-            summary="Get all countries from DB",
-            description="Return Country objects containing all country data."
+            summary = "Get all countries from DB",
+            description = "Return Country objects containing all country data."
     )
     @ApiResponses(
-            value={
-                    @ApiResponse(responseCode = "200",description = "All of countries was taken successful ",
-                    content = {@Content(mediaType = "application/json",schema = @Schema(implementation = CountryDto.class))}),
-                    @ApiResponse(responseCode = "403",description = "The currently authenticated principal is not permitted to update this countries data",
+            value = {
+                    @ApiResponse(responseCode = "200", description = "All of countries was taken successful ",
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CountryDto.class))}),
+                    @ApiResponse(responseCode = "403", description = "The currently authenticated principal is not permitted to update this countries data",
                             content = @Content)}
 
     )
@@ -36,10 +36,10 @@ public interface CountryController {
             description = "Return CountryDto object by specific Id with all country data"
     )
     @ApiResponses(
-            value={
-                    @ApiResponse(responseCode = "200",description = "Country by id was taken successful ",
-                            content = {@Content(mediaType = "application/json",schema = @Schema(implementation = CountryDto.class))}),
-                    @ApiResponse(responseCode = "403",description = "The currently authenticated principal is not permitted to update this countries data",
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Country by id was taken successful ",
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CountryDto.class))}),
+                    @ApiResponse(responseCode = "403", description = "The currently authenticated principal is not permitted to update this countries data",
                             content = @Content)}
 
     )
@@ -51,10 +51,10 @@ public interface CountryController {
             description = "Return CountryDto object by country code with all country data"
     )
     @ApiResponses(
-            value={
-                    @ApiResponse(responseCode = "200",description = "Country by country code was taken successful ",
-                            content = {@Content(mediaType = "application/json",schema = @Schema(implementation = CountryDto.class))}),
-                    @ApiResponse(responseCode = "403",description = "The currently authenticated principal is not permitted to update this countries data",
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Country by country code was taken successful ",
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CountryDto.class))}),
+                    @ApiResponse(responseCode = "403", description = "The currently authenticated principal is not permitted to update this countries data",
                             content = @Content)})
     @GetMapping("/country-code")
     Mono<CountryDto> getCountryByCountryCode(@RequestParam String countryCode);
@@ -64,10 +64,10 @@ public interface CountryController {
             description = "Fill above schema and create new customer"
     )
     @ApiResponses(
-            value={
-                    @ApiResponse(responseCode = "200",description = "Country was created successful ",
-                            content = {@Content(mediaType = "application/json",schema = @Schema(implementation = CountryDto.class))}),
-                    @ApiResponse(responseCode = "403",description = "The currently authenticated principal is not permitted to update this countries data",
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Country was created successful ",
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CountryDto.class))}),
+                    @ApiResponse(responseCode = "403", description = "The currently authenticated principal is not permitted to update this countries data",
                             content = @Content)
             }
     )
@@ -80,15 +80,15 @@ public interface CountryController {
             description = "Update an existing country and overwrite all values in dB "
     )
     @ApiResponses(
-            value={
-                    @ApiResponse(responseCode = "200",description = "Country updated successful ",
-                            content = {@Content(mediaType = "application/json",schema = @Schema(implementation = CountryDto.class))}),
-                    @ApiResponse(responseCode = "403",description = "The currently authenticated principal is not permitted to update this countries data",
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Country updated successful ",
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CountryDto.class))}),
+                    @ApiResponse(responseCode = "403", description = "The currently authenticated principal is not permitted to update this countries data",
                             content = @Content)
             }
     )
     @PutMapping("/update/{id}")
-    Mono<CountryDto> updateProduct(@RequestBody Mono<CountryDto> countryDtoMono,@PathVariable String id);
+    Mono<CountryDto> updateProduct(@RequestBody Mono<CountryDto> countryDtoMono, @PathVariable String id);
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -77,7 +77,7 @@ class CountryServiceImplTest {
     }
 
     @Test
-    void getAllWhenMissingValue(){
+    void getAllWhenMissingValue() {
         Flux<CountryEntity> countryEntities = Flux.empty();
         when(countryRepository.findAll()).thenReturn(countryEntities);
         Flux<CountryDto> allCountry = countryService.getAllCountry();
@@ -96,7 +96,7 @@ class CountryServiceImplTest {
     }
 
     @Test
-    void getCountryByIdMissingValue(){
+    void getCountryByIdMissingValue() {
         Mono<CountryEntity> ce = Mono.empty();
         when(countryRepository.findById(anyString())).thenReturn(ce);
         Mono<CountryDto> countryById = countryService.getCountryById("1");
@@ -113,8 +113,9 @@ class CountryServiceImplTest {
                 .expectNextCount(1)
                 .verifyComplete();
     }
+
     @Test
-    void getCountryByCountryIdMissingValue(){
+    void getCountryByCountryIdMissingValue() {
         Mono<CountryEntity> ce = Mono.empty();
         when(countryRepository.findCountryEntityByCountryId(anyInt())).thenReturn(ce);
         Mono<CountryDto> countryById = countryService.getCountryByCountryId(1);
@@ -133,7 +134,7 @@ class CountryServiceImplTest {
     }
 
     @Test
-    void getCountryByCountryCodeMissingValue(){
+    void getCountryByCountryCodeMissingValue() {
         Mono<CountryEntity> ce = Mono.empty();
         when(countryRepository.findCountryEntityByCountryCode(anyString())).thenReturn(ce);
         Mono<CountryDto> countryById = countryService.getCountryByCountryCode("1");
@@ -152,7 +153,7 @@ class CountryServiceImplTest {
         StepVerifier.create(countryDtoMono)
                 .assertNext(c -> {
                     assertNotNull(c.getId());
-                    assertEquals("abcd",c.getId());
+                    assertEquals("abcd", c.getId());
                 })
                 .verifyComplete();
     }

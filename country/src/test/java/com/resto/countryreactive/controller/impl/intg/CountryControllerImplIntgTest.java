@@ -40,7 +40,7 @@ public class CountryControllerImplIntgTest {
     CountryDto countryDto1;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         countryDto = CountryDto.builder()
                 .countryId(1)
                 .countryName("България")
@@ -57,7 +57,7 @@ public class CountryControllerImplIntgTest {
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         countryRepository.deleteAll().block();
     }
 
@@ -114,9 +114,9 @@ public class CountryControllerImplIntgTest {
 
         webTestClient
                 .get()
-                .uri( uriBuilder -> uriBuilder
+                .uri(uriBuilder -> uriBuilder
                         .path(COUNTRY_URL + "/country-code")
-                        .queryParam("countryCode",countryDto.getCountryCode())
+                        .queryParam("countryCode", countryDto.getCountryCode())
                         .build())
                 .exchange()
                 .expectStatus()
@@ -132,7 +132,7 @@ public class CountryControllerImplIntgTest {
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path(COUNTRY_URL + "/country-code")
-                        .queryParam("countryCode","DE")
+                        .queryParam("countryCode", "DE")
                         .build())
                 .exchange()
                 .expectStatus()
@@ -153,26 +153,26 @@ public class CountryControllerImplIntgTest {
                 .expectBody(CountryDto.class)
                 .consumeWith(countryDtoEntityExchangeResult -> {
                     var responseBody = countryDtoEntityExchangeResult.getResponseBody();
-                    assert responseBody !=null;
-                    assert responseBody.getId() !=null;
-                    assertEquals(countryDtoMono.getId(),responseBody.getId());
+                    assert responseBody != null;
+                    assert responseBody.getId() != null;
+                    assertEquals(countryDtoMono.getId(), responseBody.getId());
                 });
     }
 
     @Test
     void updateProduct() {
-        var country =  CountryDto.builder()
+        var country = CountryDto.builder()
                 .countryId(2)
                 .countryName("Гърция1")
                 .countryNameEu("Greece1")
                 .countryCode("GR").build();
         final String id = countryDto1.getId();
-        countryService.updateCountry(Mono.just(country),id).block();
+        countryService.updateCountry(Mono.just(country), id).block();
         Mono<CountryDto> countryById = countryService.getCountryById(id);
 
         webTestClient
                 .put()
-                .uri(COUNTRY_URL + "/update/{id}",id)
+                .uri(COUNTRY_URL + "/update/{id}", id)
                 .bodyValue(countryById.block())
                 .exchange()
                 .expectStatus()
@@ -180,9 +180,9 @@ public class CountryControllerImplIntgTest {
                 .expectBody(CountryDto.class)
                 .consumeWith(countryDtoEntityExchangeResult -> {
                     var responseBody = countryDtoEntityExchangeResult.getResponseBody();
-                    assert responseBody !=null;
-                    assert responseBody.getId() !=null;
-                    assertEquals(country.getCountryName(),responseBody.getCountryName());
+                    assert responseBody != null;
+                    assert responseBody.getId() != null;
+                    assertEquals(country.getCountryName(), responseBody.getCountryName());
                 });
     }
 

@@ -56,7 +56,7 @@ public class CountryServiceImplIntgTest {
 
     @Test
     void getAllCountry() {
-        var countries = List.of(countryEntity,countryEntity1);
+        var countries = List.of(countryEntity, countryEntity1);
         countryRepository.saveAll(countries).blockLast();
         Flux<CountryDto> allCountry = countryService.getAllCountry();
         StepVerifier.create(allCountry)
@@ -65,7 +65,7 @@ public class CountryServiceImplIntgTest {
     }
 
     @Test
-    void getAllWhenMissingValue(){
+    void getAllWhenMissingValue() {
         Flux<CountryDto> allCountry = countryService.getAllCountry();
         StepVerifier.create(allCountry)
                 .expectError(CustomerNotFoundException.class);
@@ -73,7 +73,7 @@ public class CountryServiceImplIntgTest {
 
     @Test
     void getCountryById() {
-        var countries = List.of(countryEntity,countryEntity1);
+        var countries = List.of(countryEntity, countryEntity1);
         CountryEntity countryEntity = countryRepository.saveAll(countries).blockLast();
         Mono<CountryDto> countryById1 = countryService.getCountryById(countryEntity.getId());
         StepVerifier.create(countryById1)
@@ -82,7 +82,7 @@ public class CountryServiceImplIntgTest {
     }
 
     @Test
-    void getCountryByIdMissingValue(){
+    void getCountryByIdMissingValue() {
         Mono<CountryDto> countryById = countryService.getCountryById("1");
         StepVerifier.create(countryById)
                 .expectError(CustomerNotFoundException.class);
@@ -90,15 +90,16 @@ public class CountryServiceImplIntgTest {
 
     @Test
     void getCountryByCountryId() {
-        var countries = List.of(countryEntity,countryEntity1);
+        var countries = List.of(countryEntity, countryEntity1);
         countryRepository.saveAll(countries).blockLast();
         Mono<CountryDto> countryById1 = countryService.getCountryByCountryId(1);
         StepVerifier.create(countryById1)
                 .expectNextCount(1)
                 .verifyComplete();
     }
+
     @Test
-    void getCountryByCountryIdMissingValue(){
+    void getCountryByCountryIdMissingValue() {
         Mono<CountryDto> countryById = countryService.getCountryByCountryId(1);
         StepVerifier.create(countryById)
                 .expectError(CustomerNotFoundException.class);
@@ -106,7 +107,7 @@ public class CountryServiceImplIntgTest {
 
     @Test
     void getCountryByCountryCode() {
-        var countries = List.of(countryEntity,countryEntity1);
+        var countries = List.of(countryEntity, countryEntity1);
         countryRepository.saveAll(countries).blockLast();
         Mono<CountryDto> countryById1 = countryService.getCountryByCountryCode("GR");
         StepVerifier.create(countryById1)
@@ -115,7 +116,7 @@ public class CountryServiceImplIntgTest {
     }
 
     @Test
-    void getCountryByCountryCodeMissingValue(){
+    void getCountryByCountryCodeMissingValue() {
         Mono<CountryDto> countryById = countryService.getCountryByCountryCode("1");
         StepVerifier.create(countryById)
                 .expectError(CustomerNotFoundException.class);
@@ -131,7 +132,7 @@ public class CountryServiceImplIntgTest {
     }
 
     @Test
-    void updateCountry(){
+    void updateCountry() {
         CountryEntity ce = CountryEntity.builder().countryCode("EU").countryName("Europe").build();
         CountryDto countryDto = AppUtils.entityToDto(ce);
 
@@ -144,13 +145,13 @@ public class CountryServiceImplIntgTest {
         assertNotNull(updatedCountry.getCountryName());
         assertNotNull(updatedCountry.getCountryNameEu());
         assertNotNull(updatedCountry.getCountryCode());
-        assertEquals(block.getCountryName(),updatedCountry.getCountryName());
-        assertEquals(block.getCountryNameEu(),updatedCountry.getCountryNameEu());
-        assertEquals(block.getCountryCode(),updatedCountry.getCountryCode());
+        assertEquals(block.getCountryName(), updatedCountry.getCountryName());
+        assertEquals(block.getCountryNameEu(), updatedCountry.getCountryNameEu());
+        assertEquals(block.getCountryCode(), updatedCountry.getCountryCode());
     }
 
     @Test
-    void deleteCountry(){
+    void deleteCountry() {
         CountryEntity ce = CountryEntity.builder().countryCode("EU").countryName("Europe").build();
         CountryDto countryDto = AppUtils.entityToDto(ce);
 

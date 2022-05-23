@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 
 
-@WebFluxTest(controllers = CountryController.class,excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
+@WebFluxTest(controllers = CountryController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
 @AutoConfigureWebTestClient
 class CountryControllerImplTest {
 
@@ -38,7 +38,7 @@ class CountryControllerImplTest {
     @Test
     void getAllCountries() {
         var counties = List.of(CountryDto.builder().countryId(1).countryName("България").countryNameEu("Bulgaria").countryCode("BG").build(),
-                 CountryDto.builder().countryId(2).countryName("Швеция").countryNameEu("Sweden").countryCode("SW").build());
+                CountryDto.builder().countryId(2).countryName("Швеция").countryNameEu("Sweden").countryCode("SW").build());
         when(countryService.getAllCountry()).thenReturn(Flux.fromIterable(counties));
 
         webTestClient
@@ -99,10 +99,10 @@ class CountryControllerImplTest {
 
         webTestClient
                 .get()
-                .uri( uriBuilder -> uriBuilder
+                .uri(uriBuilder -> uriBuilder
                         .path(COUNTRY_URL + "/country-code")
-                .queryParam("countryCode","DE")
-                .build())
+                        .queryParam("countryCode", "DE")
+                        .build())
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful()
@@ -119,7 +119,7 @@ class CountryControllerImplTest {
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path(COUNTRY_URL + "/country-code")
-                        .queryParam("countryCode","DE")
+                        .queryParam("countryCode", "DE")
                         .build())
                 .exchange()
                 .expectStatus()
@@ -142,9 +142,9 @@ class CountryControllerImplTest {
                 .expectBody(CountryDto.class)
                 .consumeWith(countryDtoEntityExchangeResult -> {
                     var responseBody = countryDtoEntityExchangeResult.getResponseBody();
-                    assert responseBody !=null;
-                    assert responseBody.getId() !=null;
-                    assertEquals("1234f65ht",responseBody.getId());
+                    assert responseBody != null;
+                    assert responseBody.getId() != null;
+                    assertEquals("1234f65ht", responseBody.getId());
                 });
     }
 
@@ -154,11 +154,11 @@ class CountryControllerImplTest {
         Mono<CountryDto> just = Mono.just(CountryDto.builder().id("1234f65ht").countryId(1).countryName("България1").countryNameEu("Bulgaria").countryCode("SW").build());
         final String id = just.block().getId();
 
-        when(countryService.updateCountry(isA(Mono.class),isA(String.class))).thenReturn(just);
+        when(countryService.updateCountry(isA(Mono.class), isA(String.class))).thenReturn(just);
 
         webTestClient
                 .put()
-                .uri(COUNTRY_URL + "/update/{id}",id)
+                .uri(COUNTRY_URL + "/update/{id}", id)
                 .bodyValue(country)
                 .exchange()
                 .expectStatus()
@@ -166,9 +166,9 @@ class CountryControllerImplTest {
                 .expectBody(CountryDto.class)
                 .consumeWith(countryDtoEntityExchangeResult -> {
                     var responseBody = countryDtoEntityExchangeResult.getResponseBody();
-                    assert responseBody !=null;
-                    assert responseBody.getId() !=null;
-                    assertEquals("България1",responseBody.getCountryName());
+                    assert responseBody != null;
+                    assert responseBody.getId() != null;
+                    assertEquals("България1", responseBody.getCountryName());
                 });
     }
 
@@ -178,7 +178,7 @@ class CountryControllerImplTest {
         when(countryService.deleteCountry(anyString())).thenReturn(Mono.empty());
         webTestClient
                 .delete()
-                .uri(COUNTRY_URL +"/delete/" + id)
+                .uri(COUNTRY_URL + "/delete/" + id)
                 .exchange()
                 .expectStatus()
                 .isNoContent();

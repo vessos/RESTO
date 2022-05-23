@@ -1,8 +1,8 @@
 package com.resto.countryreactive.exceptionHandler;
 
-public class NotAuthorizedException extends RuntimeException{
+public class NotAuthorizedException extends RuntimeException {
 
-    public NotAuthorizedException(String message){
+    public NotAuthorizedException(String message) {
         super(message);
     }
 }

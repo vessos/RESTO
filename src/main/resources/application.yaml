@@ -1,0 +1,16 @@
+spring:
+  data:
+    mongodb:
+      database: areadb
+      host: localhost
+      port: 27017
+server:
+  port: 8081
+springfox:
+  documentation:
+    swagger-ui:
+      base-url: /api
+
+movie:
+  service:
+    url: http://localhost:8080

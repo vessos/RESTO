@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 
-public interface CountryRepository extends ReactiveMongoRepository<CountryEntity,String> {
+public interface CountryRepository extends ReactiveMongoRepository<CountryEntity, String> {
 
     Mono<CountryEntity> findCountryEntityByCountryCode(String countryCode);
+
     Mono<CountryEntity> findCountryEntityByCountryId(Integer id);
 }

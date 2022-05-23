@@ -1,4 +1,4 @@
-package com.resto.countryreactive.conf;
+package com.area.areaservice.conf;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
